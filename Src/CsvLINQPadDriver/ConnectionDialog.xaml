@@ -246,7 +246,7 @@
                             ToolTip="Active file type"
                             SelectedValue="{Binding FileType}"
                             MinWidth="47"
-                            Padding="4 2 4 3"
+                            Padding="4 3 4 3"
                             ItemsSource="{Binding Source={StaticResource FileTypeData}}"
                             SelectionChanged="FileTypeComboBox_OnSelectionChanged"/>
                         <Label Padding="3 3 0 3" Content="_Files" Target="{Binding ElementName=FilesTextBox}"/>

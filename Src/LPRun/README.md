@@ -143,7 +143,7 @@ public class LPRunTests
 
             // FluentAssertions helper.
             yield return
-                @"string Reason([CallerLineNumber] int sourceLineNumber = 0) =>" +
+                 "string Reason([CallerLineNumber] int sourceLineNumber = 0) =>" +
                 @" $""something went wrong at line #{sourceLineNumber}"";";
 
             // Test context.
