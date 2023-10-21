@@ -51,30 +51,32 @@ public static class Runner
     public record RetryOnError(int? Times = null, TimeSpan? Timeout = null);
 
     /// <summary>
-    /// Executes LINQPad script using LPRun with optional timeout specified.
+    /// Executes LINQPad script using LPRun with optional timeout specified and LPRun command-line options.
     /// </summary>
     /// <param name="linqFile">The LINQPad script file to execute.</param>
     /// <param name="waitForExit">The LINQPad script execution timeout. 1 minute is the default.</param>
     /// <param name="retryOnError">The number of times to retry the operation on error and timeout between tries.</param>
-    /// <param name="commandLineParams">The additional <a href="https://www.linqpad.net/lprun.aspx">LPRun command-line</a> parameters. <seealso href="https://www.linqpad.net/lprun.aspx">LINQPad Command-Line and Scripting</seealso></param>
+    /// <param name="commandLineOptions">The additional <a href="https://www.linqpad.net/lprun.aspx">LPRun command-line</a> options. See <see cref="Options">options</see> class for details.</param>
     /// <returns>The LINQPad script execution <see cref="Result"/>.</returns>
     /// <exception cref="LPRunException">Keeps the original exception as <see cref="P:System.Exception.InnerException"/>.</exception>
-    public static Result Execute(string linqFile, TimeSpan? waitForExit = null, RetryOnError? retryOnError = null, params string[] commandLineParams) =>
-        ExecuteAsyncInternal(true, linqFile, waitForExit, retryOnError, commandLineParams).GetAwaiter().GetResult();
+    /// <seealso href="https://www.linqpad.net/lprun.aspx">LINQPad Command-Line and Scripting</seealso>
+    public static Result Execute(string linqFile, TimeSpan? waitForExit = null, RetryOnError? retryOnError = null, params string[] commandLineOptions) =>
+        ExecuteAsyncInternal(true, linqFile, waitForExit, retryOnError, commandLineOptions).GetAwaiter().GetResult();
 
     /// <summary>
-    /// Asynchronously executes LINQPad script using LPRun with optional timeout specified.
+    /// Executes LINQPad script using LPRun with optional timeout specified and LPRun command-line options.
     /// </summary>
     /// <param name="linqFile">The LINQPad script file to execute.</param>
     /// <param name="waitForExit">The LINQPad script execution timeout. 1 minute is the default.</param>
     /// <param name="retryOnError">The number of times to retry the operation on error and timeout between tries.</param>
-    /// <param name="commandLineParams">The additional <a href="https://www.linqpad.net/lprun.aspx">LPRun command-line</a> parameters. <seealso href="https://www.linqpad.net/lprun.aspx">LINQPad Command-Line and Scripting</seealso></param>
+    /// <param name="commandLineOptions">The additional <a href="https://www.linqpad.net/lprun.aspx">LPRun command-line</a> options. See <see cref="Options">options</see> class for details.</param>
     /// <returns>A task that represents the asynchronous LINQPad script execution <see cref="Result"/>.</returns>
     /// <exception cref="LPRunException">Keeps the original exception as <see cref="P:System.Exception.InnerException"/>.</exception>
-    public static Task<Result> ExecuteAsync(string linqFile, TimeSpan? waitForExit = null, RetryOnError? retryOnError = null, params string[] commandLineParams) =>
-        ExecuteAsyncInternal(false, linqFile, waitForExit, retryOnError, commandLineParams);
+    /// <seealso href="https://www.linqpad.net/lprun.aspx">LINQPad Command-Line and Scripting</seealso>
+    public static Task<Result> ExecuteAsync(string linqFile, TimeSpan? waitForExit = null, RetryOnError? retryOnError = null, params string[] commandLineOptions) =>
+        ExecuteAsyncInternal(false, linqFile, waitForExit, retryOnError, commandLineOptions);
 
-    private static Task<Result> ExecuteAsyncInternal(bool asSync, string linqFile, TimeSpan? waitForExit, RetryOnError? retryOnError, params string[] commandLineParams)
+    private static Task<Result> ExecuteAsyncInternal(bool asSync, string linqFile, TimeSpan? waitForExit, RetryOnError? retryOnError, params string[] commandLineOptions)
     {
         return RetryAsync(() => WrapAsync(ExecuteAsyncLocal));
 
@@ -153,7 +155,7 @@ public static class Runner
             throw new TimeoutException($"LPRun timed out after {waitForExit}");
 
             string GetArguments() =>
-                $@"-fx={FrameworkInfo.Version.Major}.{FrameworkInfo.Version.Minor} ""{GetFullPath(linqFile)}"" {string.Join(" ", commandLineParams)}";
+                $@"-fx={FrameworkInfo.Version.Major}.{FrameworkInfo.Version.Minor} ""{GetFullPath(linqFile)}"" {string.Join(" ", commandLineOptions)}";
 
             void OutputDataReceivedHandler(object _, DataReceivedEventArgs e) =>
                 output.Append(e.Data);
