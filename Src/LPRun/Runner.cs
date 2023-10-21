@@ -35,7 +35,7 @@ public static class Runner
     /// <param name="Output">The LINQPad script execution captured output stream.</param>
     /// <param name="Error">The LINQPad script execution captured error stream.</param>
     /// <param name="ExitCode">The LINQPad script execution exit code.</param>
-    public record Result(string Output, string Error, int ExitCode)
+    public sealed record Result(string Output, string Error, int ExitCode)
     {
         /// <summary>
         /// Indicates that operation completed successfully.
@@ -48,7 +48,7 @@ public static class Runner
     /// </summary>
     /// <param name="Times">The number of times to retry the operation.</param>
     /// <param name="Timeout">The timeout between tries.</param>
-    public record RetryOnError(int? Times = null, TimeSpan? Timeout = null);
+    public sealed record RetryOnError(int? Times = null, TimeSpan? Timeout = null);
 
     /// <summary>
     /// Executes LINQPad script using LPRun with optional timeout specified and LPRun command-line options.
