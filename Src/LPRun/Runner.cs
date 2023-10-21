@@ -27,7 +27,7 @@ public static class Runner
     };
 
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(1);
-    private static readonly TimeSpan RetryTimeout   = TimeSpan.FromMilliseconds(250);
+    private static readonly TimeSpan RetryTimeout   = TimeSpan.FromSeconds(3);
 
     /// <summary>
     /// The LINQPad script execution result.

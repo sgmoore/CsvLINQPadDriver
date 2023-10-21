@@ -16,8 +16,10 @@ public sealed partial class LPRunTests
 {
 #if GITHUB_ACTIONS
     private const int RetryCount = 3;
+
+    private static readonly TimeSpan RetryTimeout = TimeSpan.FromSeconds(10);
 #endif
-    private static readonly TimeSpan RetryTimeout = TimeSpan.FromMinutes(2);
+    private static readonly TimeSpan WaitTimeout = TimeSpan.FromMinutes(3);
 
     private sealed record FileEncoding(string FileName, Encoding Encoding);
 
@@ -59,9 +61,9 @@ public sealed partial class LPRunTests
 
     private static Task<Runner.Result> ExecuteAsync(string scriptFile) =>
         Runner.ExecuteAsync(scriptFile,
-            RetryTimeout
+            WaitTimeout
 #if GITHUB_ACTIONS
-            , new (RetryCount)
+            , new (RetryCount, RetryTimeout)
 #endif
         );
 }
