@@ -1,7 +1,9 @@
 ﻿<Project>
   <PropertyGroup>
     <Version>8.0.0</Version>
-    <PackageReleaseNotes>.NET 8.0 support.</PackageReleaseNotes>
+    <PackageReleaseNotes>.NET 8.0 support.
+Added ToBigInteger, ToBigIntegerSafe, ToComplex, ToComplexSafe extension methods.
+Punctuation header detection supports leading '@'</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>

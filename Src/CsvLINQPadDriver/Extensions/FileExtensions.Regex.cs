@@ -8,17 +8,17 @@ internal static partial class FileExtensions
 {
     private const string GetFilesRegexPattern                                      = @"[\r\n]+";
     private const string MatchDeduceIsFileOrFolderRegexPattern                     = @"[\\/]$";
-    private const string DeduceIsFileOrFolderRegexPattern                          = @"[?*]";
+    private const string DeduceIsFileOrFolderRegexPattern                          =  "[?*]";
 
     private const RegexOptions HeaderDetectionRegexOptions                         = ExplicitCapture | Compiled;
 
-    private const string HeaderDetectionHasHeaderRegexPattern                      = @".";
-    private const string HeaderDetectionAllLettersNumbersPunctuationRegexPattern   = @"^\p{L}\p{M}*(\p{L}\p{M}*|[0-9_\-. ])*$";
+    private const string HeaderDetectionHasHeaderRegexPattern                      =  ".";
+    private const string HeaderDetectionAllLettersNumbersPunctuationRegexPattern   = @"^(@|\p{L}\p{M}*)(\p{L}\p{M}*|[0-9_\-. ])*$";
     private const string HeaderDetectionAllLettersNumbersRegexPattern              = @"^\p{L}\p{M}*(\p{L}\p{M}*|[0-9])*$";
     private const string HeaderDetectionAllLettersRegexPattern                     = @"^(\p{L}\p{M}*)+$";
-    private const string HeaderDetectionLatinLettersNumbersPunctuationRegexPattern = @"^[a-zA-Z][a-zA-Z0-9_\-. ]*$";
-    private const string HeaderDetectionLatinLettersNumbersRegexPattern            = @"^[a-zA-Z][a-zA-Z0-9]*$";
-    private const string HeaderDetectionLatinLettersRegexPattern                   = @"^[a-zA-Z]+$";
+    private const string HeaderDetectionLatinLettersNumbersPunctuationRegexPattern = @"^@?[a-zA-Z][a-zA-Z0-9_\-. ]*$";
+    private const string HeaderDetectionLatinLettersNumbersRegexPattern            =  "^[a-zA-Z][a-zA-Z0-9]*$";
+    private const string HeaderDetectionLatinLettersRegexPattern                   =  "^[a-zA-Z]+$";
 
 #if NET7_0_OR_GREATER
     [GeneratedRegex(GetFilesRegexPattern, None, Config.Regex.TimeoutMs)]

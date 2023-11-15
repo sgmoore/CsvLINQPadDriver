@@ -6,8 +6,8 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <Product>LINQPad 7/6 CSV Driver</Product>
-    <AssemblyTitle>LINQPad 7/6 CSV driver</AssemblyTitle>
+    <Product>LINQPad 8/7/6 CSV Driver</Product>
+    <AssemblyTitle>LINQPad 8/7/6 CSV driver</AssemblyTitle>
     <Description>$(AssemblyTitle).</Description>
   </PropertyGroup>
 

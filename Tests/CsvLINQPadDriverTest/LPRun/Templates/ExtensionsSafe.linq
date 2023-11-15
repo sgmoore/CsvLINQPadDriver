@@ -101,6 +101,14 @@ invalidString.ToHalfSafe().Should().BeNull(Reason());
 nullString.ToHalfSafe().Should().BeNull(Reason());
 #endif
 
+// BigInteger.
+const string bigIntegerString = "90612345123875509091827560007100099";
+var expectedBigInteger = BigInteger.Parse(bigIntegerString);
+((ReadOnlySpan<char>)bigIntegerString).ToBigIntegerSafe().Should().Be(expectedBigInteger, Reason());
+bigIntegerString.ToBigIntegerSafe().Should().Be(expectedBigInteger, Reason());
+invalidString.ToBigIntegerSafe().Should().BeNull(Reason());
+nullString.ToBigIntegerSafe().Should().BeNull(Reason());
+
 // Float.
 ((ReadOnlySpan<char>)"1.23").ToFloatSafe().Should().Be(1.23f, Reason());
 "1.23".ToFloatSafe().Should().Be(1.23f, Reason());
@@ -118,6 +126,14 @@ nullString.ToDoubleSafe().Should().BeNull(Reason());
 "1".ToDecimalSafe().Should().Be(1m, Reason());
 invalidString.ToDecimalSafe().Should().BeNull(Reason());
 nullString.ToDecimalSafe().Should().BeNull(Reason());
+
+// Complex.
+const string complexString = "<1.234; -9.1>";
+var expectedComplex = new Complex(1.234, -9.1);
+((ReadOnlySpan<char>)complexString).ToComplexSafe().Should().Be(expectedComplex, Reason());
+complexString.ToComplexSafe().Should().Be(expectedComplex, Reason());
+invalidString.ToComplexSafe().Should().BeNull(Reason());
+nullString.ToComplexSafe().Should().BeNull(Reason());
 
 // Guid.
 var expectedGuid = Guid.NewGuid();

@@ -65,7 +65,7 @@ public sealed partial class LPRunTests
 
         IEnumerable<string> GetQueryHeaders()
         {
-            yield return ConnectionHeader.Get("CsvLINQPadDriver", "CsvLINQPadDriver.CsvDataContextDriver", driverProperties, "System.Runtime.CompilerServices", nameof(CsvLINQPadDriver));
+            yield return ConnectionHeader.Get("CsvLINQPadDriver", "CsvLINQPadDriver.CsvDataContextDriver", driverProperties, "System.Numerics", "System.Runtime.CompilerServices", nameof(CsvLINQPadDriver));
             yield return defines.Where(ShouldRender).Select(static define => $"#define {define}").JoinNewLine();
             yield return @"string Reason([CallerLineNumber] int sourceLineNumber = 0) => $""something went wrong at line #{sourceLineNumber}"";";
             if (ShouldRender(context))

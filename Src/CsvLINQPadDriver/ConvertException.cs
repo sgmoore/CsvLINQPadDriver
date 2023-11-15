@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 #if !NET8_0_OR_GREATER
 using System.Runtime.Serialization;
 #endif
@@ -20,9 +21,11 @@ public class ConvertException : Exception
     }
 #endif
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static ConvertException Create(string type, string? value, Exception? innerException) =>
         new(type, value, innerException);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static ConvertException Create(string type, ReadOnlySpan<char> value, Exception? innerException) =>
         new(type, value.ToString(), innerException);
 }

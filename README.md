@@ -503,6 +503,15 @@ nuint? ToNUIntSafe(
     NumberStyles style = Styles.Integer,
     IFormatProvider? provider = null);
 
+// BigInteger
+BigInteger? ToBigInteger(
+    NumberStyles style = Styles.Integer,
+    IFormatProvider? provider = null);
+
+BigInteger? ToBigIntegerSafe(
+    NumberStyles style = Styles.Integer,
+    IFormatProvider? provider = null);
+
 // Float
 float? ToFloat(
     NumberStyles style = Styles.Float,
@@ -555,6 +564,15 @@ static UInt128? ToUInt128(
 
 static UInt128? ToUInt128Safe(
     NumberStyles style = Styles.Integer,
+    IFormatProvider? provider = null);
+
+// Complex
+Complex? ToComplex(
+    NumberStyles style = Styles.Float,
+    IFormatProvider? provider = null);
+
+Complex? ToComplexSafe(
+    NumberStyles style = Styles.Float,
     IFormatProvider? provider = null);
 
 // Guid
