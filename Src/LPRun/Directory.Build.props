@@ -1,7 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <Version>8.0.9</Version>
-    <PackageReleaseNotes>LPRun $(Version.Split("-")[0])
-.NET 8.0 support</PackageReleaseNotes>
+    <Version>8.0.10</Version>
+    <PackageReleaseNotes>LPRun $(Version.Split("-")[0])</PackageReleaseNotes>
   </PropertyGroup>
 </Project>
