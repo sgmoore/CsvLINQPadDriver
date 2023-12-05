@@ -16,7 +16,7 @@ Gets project version from Directory.Build.props and updates it for dependent fil
 param()
 
 #requires -Version 7
-Set-StrictMode -Version 3
+Set-StrictMode -Version Latest
 
 $ErrorActionPreference = 'Stop'
 $Verbose = $VerbosePreference -ne 'SilentlyContinue'
@@ -30,13 +30,13 @@ function Main
 {
     $projectFolder      = Join-Path $ThisFolder    Src\CsvLINQPadDriver
     $buildPropsFile     = Join-Path $projectFolder Directory.Build.props
-    $appManfestFile     = Join-Path $projectFolder app.manifest
+    $appManifestFile    = Join-Path $projectFolder app.manifest
     $lpxBuildScriptFile = Join-Path $ThisFolder    Deploy\buildlpx.cmd
 
     Write-Output "Reading '$buildPropsFile'..."
 
     $buildPropsXml = ([xml](Get-Content $buildPropsFile)).Project.PropertyGroup[0]
-    $version = $buildPropsXml.Version
+    $version    = $buildPropsXml.Version
     $buildProps = [PSCustomObject]@{
         Version      = $version
         FullVersion  = "$version.0"
@@ -50,7 +50,7 @@ function Main
 
     Write-Output "`n$(($buildProps | Format-List $fieldsFormat | Out-String).Trim())`n"
 
-    Update-Content $appManfestFile '(?<=CsvLINQPadDriver[\s\S]+\s+version=")[^"]+(?=[\s\S]+?type)',$buildProps.FullVersion
+    Update-Content $appManifestFile    '(?<=CsvLINQPadDriver[\s\S]+\s+version=")[^"]+(?=[\s\S]+?type)',$buildProps.FullVersion
     Update-Content $lpxBuildScriptFile '(?<=version=)[^\r\n]+',$buildProps.Version
 }
 
