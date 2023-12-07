@@ -1,4 +1,4 @@
-# CsvLINQPadDriver for LINQPad 7/6/5 #
+# CsvLINQPadDriver for LINQPad 8/7/6/5 #
 
 [![Latest build](https://github.com/i2van/CsvLINQPadDriver/workflows/build/badge.svg)](https://github.com/i2van/CsvLINQPadDriver/actions)
 [![NuGet](https://img.shields.io/nuget/v/CsvLINQPadDriver)](https://www.nuget.org/packages/CsvLINQPadDriver)
