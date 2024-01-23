@@ -22,7 +22,6 @@ public sealed partial class LPRunTests
     public sealed record ScriptFromSourceTestData(bool Succeeded, string Payload, bool HasErrorOutput = false, int? ExitCode = null);
 
     [Test]
-    [Parallelizable(ParallelScope.Children)]
     [TestCaseSource(nameof(ScriptFromSourceTestDataTestsData))]
     public async Task Execute_ScriptFromSource_Success(ScriptFromSourceTestData testData)
     {

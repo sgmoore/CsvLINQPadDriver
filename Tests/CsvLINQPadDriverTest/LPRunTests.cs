@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 using LPRun;
 
+[assembly: Parallelizable(ParallelScope.ContextMask)]
+
 namespace CsvLINQPadDriverTest;
 
 [TestFixture]

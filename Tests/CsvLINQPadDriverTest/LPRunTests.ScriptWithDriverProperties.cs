@@ -32,7 +32,6 @@ public sealed partial class LPRunTests
     }
 
     [Test]
-    [Parallelizable(ParallelScope.Children)]
     [TestCaseSource(nameof(ParallelizableScriptWithDriverPropertiesTestDataTestsData))]
     public async Task Execute_ScriptWithDriverProperties_Success(ScriptWithDriverPropertiesTestData testData)
     {
