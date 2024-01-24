@@ -842,8 +842,8 @@ TimeOnly? ToTimeOnlySafe(
 
 ## Authors ##
 
-* Martin Dobroucký (dobrou@gmail.com)
-* Ivan Ivon (ivan.ivon@gmail.com)
+* [Martin Dobroucký](https://github.com/dobrou)
+* [Ivan Ivon](https://github.com/i2van)
 
 ## Credits ##
 

@@ -266,7 +266,7 @@ var driverProperties = Mock.Of<IDriverProperties>(props =>
 
 ## Authors ##
 
-* Ivan Ivon (ivan.ivon@gmail.com)
+* [Ivan Ivon](https://github.com/i2van)
 
 ## Credits ##
 
