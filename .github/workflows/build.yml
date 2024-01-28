@@ -18,7 +18,7 @@ jobs:
     # Setup
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3.2.0
+      uses: actions/setup-dotnet@v4.0.0
       with:
         dotnet-version: |
           3.1.x
@@ -44,10 +44,10 @@ jobs:
     # LINQPad 5
 
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.3.1
+      uses: microsoft/setup-msbuild@v1.3.2
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.2
+      uses: NuGet/setup-nuget@f685ada866d3ce9775950304dccf4cec8208e6cf
 
     - name: ${{env.SLN5}} restore dependencies
       run: nuget restore ${{env.SLN5}}
@@ -63,7 +63,7 @@ jobs:
     # Upload artifacts
 
     - name: Publish CsvLINQPadDriver
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.3.0
       with:
         name: CsvLINQPadDriver${{env.BIN_POSTFIX}}
         path: |
@@ -73,7 +73,7 @@ jobs:
         retention-days: ${{env.RETENTION_DAYS}}
 
     - name: Publish LPRun
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.3.0
       with:
         name: LPRun${{env.BIN_POSTFIX}}
         path: bin/${{env.SLN_CONFIG}}/LPRun.*.*nupkg
