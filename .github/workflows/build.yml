@@ -15,30 +15,20 @@ jobs:
 
     steps:
 
-    # Setup
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4.0.0
-      with:
-        dotnet-version: |
-          3.1.x
-          5.0.x
-          8.0.x
-
     # Checkout
 
-    - name: Checkout
+    - name: Checkout ${{env.SLN}}
       uses: actions/checkout@v4.1.1
 
     # LINQPad 7/6
 
-    - name: ${{env.SLN}} restore dependencies
+    - name: Restore ${{env.SLN}}
       run: dotnet restore ${{env.SLN}}
 
-    - name: ${{env.SLN}} ${{env.SLN_CONFIG}} build
+    - name: Build ${{env.SLN}} ${{env.SLN_CONFIG}}
       run: dotnet build ${{env.SLN}} --configuration ${{env.SLN_CONFIG}} --no-restore -p:GITHUB_ACTIONS=true
 
-    - name: ${{env.SLN}} ${{env.SLN_CONFIG}} test
+    - name: Test ${{env.SLN}} ${{env.SLN_CONFIG}}
       run: dotnet test ${{env.SLN}} --configuration ${{env.SLN_CONFIG}} --no-build --verbosity normal
 
     # LINQPad 5
@@ -47,12 +37,12 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.2
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.3.0
+      uses: NuGet/setup-nuget@v2.0.0
 
-    - name: ${{env.SLN5}} restore dependencies
+    - name: Restore ${{env.SLN5}}
       run: nuget restore ${{env.SLN5}}
 
-    - name: ${{env.SLN5}} ${{env.SLN_CONFIG}} build
+    - name: Build ${{env.SLN5}} ${{env.SLN_CONFIG}}
       run: msbuild ${{env.SLN5}} /p:Configuration=${{env.SLN_CONFIG}}
 
     # Create LPX
@@ -62,7 +52,7 @@ jobs:
 
     # Upload artifacts
 
-    - name: Publish CsvLINQPadDriver
+    - name: Publish ${{env.SLN}} ${{env.SLN_CONFIG}}, ${{env.SLN5}} ${{env.SLN_CONFIG}}
       uses: actions/upload-artifact@v4.3.0
       with:
         name: CsvLINQPadDriver${{env.BIN_POSTFIX}}
@@ -72,7 +62,7 @@ jobs:
           Deploy/*.lpx?
         retention-days: ${{env.RETENTION_DAYS}}
 
-    - name: Publish LPRun
+    - name: Publish LPRun ${{env.SLN_CONFIG}}
       uses: actions/upload-artifact@v4.3.0
       with:
         name: LPRun${{env.BIN_POSTFIX}}
