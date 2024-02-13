@@ -46,7 +46,7 @@ internal static partial class ShellExtensions
             Marshal.ThrowExceptionForHR(SHParseDisplayName(folderPath, IntPtr.Zero, out folder, 0, out _));
             Marshal.ThrowExceptionForHR(SHParseDisplayName(filePath, IntPtr.Zero, out file, 0, out _));
 
-            IntPtr[] files = { file };
+            IntPtr[] files = [ file ];
             Marshal.ThrowExceptionForHR(SHOpenFolderAndSelectItems(folder, (uint) files.Length, files, 0));
         }
         catch (Exception exception) when (exception.CanBeHandled())
