@@ -41,13 +41,21 @@ public sealed partial class LPRunTests
             result.Error.Should().BeNullOrEmpty();
         }
 
-        string GetScript() => $$"""
-                                int Main()
-                                {
-                                    {{testData.Payload}};
-                                    return {{SuccessExitCode}};
-                                }
-                                """;
+        string GetScript()
+        {
+            var isTaskFromResult = testData.Payload.Contains("Task.FromResult");
+
+            return
+                $$"""
+                  using System.Threading.Tasks;
+
+                  {{(isTaskFromResult ? "Task<int>" : "int")}} Main()
+                  {
+                      {{testData.Payload}};
+                      return {{(isTaskFromResult ? "Task.FromResult(" : "(")}}{{SuccessExitCode}});
+                  }
+                  """;
+        }
     }
 
     private static IEnumerable<ScriptFromSourceTestData> ScriptFromSourceTestDataTestsData()
@@ -60,5 +68,7 @@ public sealed partial class LPRunTests
         yield return new(false, $@"throw new Exception(""{ErrorMessage}"")", true, 1); // LPRun exit code.
         yield return new(false, $"return {ErrorExitCode}");
         yield return new(true,  $"return {SuccessExitCode}");
+        yield return new(false, $"return Task.FromResult({ErrorExitCode})");
+        yield return new(true,  $"return Task.FromResult({SuccessExitCode})");
     }
 }
