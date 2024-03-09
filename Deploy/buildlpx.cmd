@@ -1,6 +1,6 @@
 @echo off
 
-set version=8.3.0
+set version=8.4.0
 set fileName=CsvLINQPadDriver.%version%
 set ext=lpx
 set ext6=%ext%6
@@ -11,12 +11,14 @@ set zip="%ProgramFiles%\7-Zip\7z.exe"
 
 echo on
 
-call :pack %fileName%-net8.%ext6%   net8.0-windows
-call :pack %fileName%-net7.%ext6%   net7.0-windows
-call :pack %fileName%-net6.%ext6%   net6.0-windows
-call :pack %fileName%-net5.%ext6%   net5.0-windows
-call :pack %fileName%-net3.1.%ext6% netcoreapp3.1
-call :pack %fileName%.%ext%         net471
+call :pack %fileName%-net8.%ext6%   net8.0-windows        || goto break
+call :pack %fileName%-net7.%ext6%   net7.0-windows        || goto break
+call :pack %fileName%-net6.%ext6%   net6.0-windows        || goto break
+call :pack %fileName%-net5.%ext6%   net5.0-windows        || goto break
+call :pack %fileName%-net3.1.%ext6% netcoreapp3.1-windows || goto break
+call :pack %fileName%.%ext%         net471                || goto break
+
+:break
 
 @echo off
 
@@ -27,6 +29,7 @@ if not %errorlevel%==0 echo ERROR: Packaging has failed. See log for details.
 exit /b %errorlevel%
 
 :pack
+
 @echo off
 
 set lpx=%rootDir%\%1
