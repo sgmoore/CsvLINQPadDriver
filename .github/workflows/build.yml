@@ -15,9 +15,9 @@ jobs:
 
     steps:
 
-    # Checkout
+    # Check out
 
-    - name: Checkout ${{env.SLN}}
+    - name: Check out ${{env.SLN}}
       uses: actions/checkout@v4.1.1
 
     # LINQPad 7/6
