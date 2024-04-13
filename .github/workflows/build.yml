@@ -20,7 +20,7 @@ jobs:
     - name: Check out ${{env.SLN}}
       uses: actions/checkout@v4.1.1
 
-    # LINQPad 7/6
+    # LINQPad 8/7/6
 
     - name: Restore ${{env.SLN}}
       run: dotnet restore ${{env.SLN}}
@@ -60,11 +60,4 @@ jobs:
           bin/${{env.SLN_CONFIG}}/CsvLINQPadDriver.*.*nupkg
           Deploy/*.lpx
           Deploy/*.lpx?
-        retention-days: ${{env.RETENTION_DAYS}}
-
-    - name: Publish LPRun ${{env.SLN_CONFIG}}
-      uses: actions/upload-artifact@v4.3.0
-      with:
-        name: LPRun${{env.BIN_POSTFIX}}
-        path: bin/${{env.SLN_CONFIG}}/LPRun.*.*nupkg
         retention-days: ${{env.RETENTION_DAYS}}
