@@ -39,6 +39,14 @@ jobs:
     - name: Test ${{env.SLN}} ${{env.SLN_CONFIG}}
       run: dotnet test ${{env.SLN}} --configuration ${{env.SLN_CONFIG}} --no-build --verbosity normal
 
+    - name: Create ${{env.SLN}} ${{env.SLN_CONFIG}} test report
+      uses: dorny/test-reporter@v1.9.1
+      if: always()
+      with:
+        name: tests
+        path: '**/*.trx'
+        reporter: dotnet-trx
+
     # LINQPad 5
 
     - name: Setup msbuild
