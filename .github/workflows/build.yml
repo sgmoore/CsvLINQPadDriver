@@ -41,7 +41,7 @@ jobs:
 
     - name: Create ${{env.SLN}} ${{env.SLN_CONFIG}} test report
       uses: dorny/test-reporter@v1.9.1
-      if: success() || failure()
+      if: ${{success() || failure()}}
       with:
         name: tests
         path: '**/*.trx'
