@@ -32,7 +32,7 @@ internal static class DialogExtensions
 
         files = result
             ? openFileDialog.FileNames
-            : Array.Empty<string>();
+            : [];
 
         return result;
     }
@@ -52,7 +52,7 @@ internal static class DialogExtensions
 
         folders = result
             ? commonOpenFileDialog.FileNames.ToArray()
-            : Array.Empty<string>();
+            : [];
 
         return result;
     }

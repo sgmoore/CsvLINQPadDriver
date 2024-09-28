@@ -94,7 +94,7 @@ internal static class SchemaBuilder
                 var filePaths = new HashSet<string>(codeNames);
                 var similarFilesCount = codeNames.Count;
 
-                schema.Insert(index++, new ExplorerItem($"{codeNames.First()} similar files joined data ({similarFilesCount}/{csvDatabase.Files.Count} files {similarFilesSize})", ExplorerItemKind.QueryableObject, ExplorerIcon.View)
+                schema.Insert(index++, new ExplorerItem($"{codeNames[0]} similar files joined data ({similarFilesCount}/{csvDatabase.Files.Count} files {similarFilesSize})", ExplorerItemKind.QueryableObject, ExplorerIcon.View)
                 {
                     Children = schema.Where(IsSimilarFile).ToList(),
                     IsEnumerable = true,
@@ -124,12 +124,12 @@ internal static class SchemaBuilder
     {
 #if NETCOREAPP
 #pragma warning disable CS0618
-        var referencedAssemblies = DataContextDriver.GetCoreFxReferenceAssemblies().Concat(new []
+        var referencedAssemblies = DataContextDriver.GetCoreFxReferenceAssemblies().Concat(
 #pragma warning restore CS0618
-        {
+        [
             typeof(SchemaBuilder).Assembly.Location,
             typeof(CsvReader).Assembly.Location
-        });
+        ]);
 
         var result = DataContextDriver.CompileSource(new CompilationInput
         {
@@ -137,11 +137,11 @@ internal static class SchemaBuilder
 #pragma warning disable SYSLIB0044
             OutputPath = name.CodeBase,
 #pragma warning restore SYSLIB0044
-            SourceCode = new[] { code }
+            SourceCode = [code]
         });
 
         return result.Successful
-            ? Array.Empty<string>()
+            ? []
             : result.Errors;
 #else
         using var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> { ["CompilerVersion"] = "v4.0" });
@@ -168,7 +168,7 @@ internal static class SchemaBuilder
                 .Where(static e => !e.IsWarning)
                 .Select(static e => $"{e.Line},{e.Column}: {e.ErrorText}")
                 .ToArray()
-            : Array.Empty<string>();
+            : [];
 #endif
     }
 

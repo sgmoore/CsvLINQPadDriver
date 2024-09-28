@@ -3,6 +3,4 @@
 namespace CsvLINQPadDriver.DataDisplay;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HideFromDumpAttribute : Attribute
-{
-}
+public class HideFromDumpAttribute : Attribute;

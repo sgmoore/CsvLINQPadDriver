@@ -34,7 +34,7 @@ internal partial class ConnectionDialog
 
         static void OverrideDependencyPropertiesMetadata()
         {
-            Array.ForEach(new[] { typeof(Control), typeof(Hyperlink) }, static type => ToolTipService.ShowOnDisabledProperty.OverrideMetadata(type, new FrameworkPropertyMetadata(true)));
+            Array.ForEach([typeof(Control), typeof(Hyperlink)], static type => ToolTipService.ShowOnDisabledProperty.OverrideMetadata(type, new FrameworkPropertyMetadata(true)));
 
             var showDurationPropertyType = typeof(FrameworkElement);
             var showDurationProperty = ToolTipService.ShowDurationProperty;
@@ -141,7 +141,9 @@ internal partial class ConnectionDialog
         }
     }
 
+#pragma warning disable S2325
     private void FilesTextBox_DragEnter(object sender, DragEventArgs e)
+#pragma warning restore S2325
     {
         e.Handled =
             e.Data.GetDataPresent(DataFormats.FileDrop) ||
@@ -227,7 +229,9 @@ internal partial class ConnectionDialog
     private void ConnectionDialog_OnLoaded(object sender, RoutedEventArgs e) =>
         MoveCaretToEnd();
 
+#pragma warning disable S2325
     private void CommandBinding_OnCanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) =>
+#pragma warning restore S2325
         e.CanExecute = true;
 
     private void PasteFromClipboardFoldersAndProceedCommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e) =>
@@ -253,7 +257,9 @@ internal partial class ConnectionDialog
         OkButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
     }
 
+#pragma warning disable S2325
     private void ClipboardCommandBinding_OnCanExecute(object sender, CanExecuteRoutedEventArgs e) =>
+#pragma warning restore S2325
         e.CanExecute = CanExecutePaste();
 
     private static bool CanExecutePaste() =>
@@ -261,7 +267,9 @@ internal partial class ConnectionDialog
         Clipboard.ContainsText(TextDataFormat.UnicodeText) ||
         Clipboard.ContainsFileDropList();
 
+#pragma warning disable S2325
     private void HelpCommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e) =>
+#pragma warning restore S2325
         (e.OriginalSource switch
         {
             Hyperlink hyperlink => hyperlink.NavigateUri.OriginalString,

@@ -1,5 +1,3 @@
 ﻿namespace CsvLINQPadDriver.Wpf.EnumObjectDataSources;
 
-internal class WhitespaceTrimOptionsEnumObjectDataSource : EnumObjectDataSource<WhitespaceTrimOptions>
-{
-}
+internal class WhitespaceTrimOptionsEnumObjectDataSource : EnumObjectDataSource<WhitespaceTrimOptions>;

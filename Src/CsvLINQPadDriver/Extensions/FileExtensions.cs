@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -52,7 +53,7 @@ internal static partial class FileExtensions
 #endif
         _stringInternCache;
 
-    private static readonly Dictionary<NoBomEncoding, Encoding> NoBomEncodings = new();
+    private static readonly Dictionary<NoBomEncoding, Encoding> NoBomEncodings = [];
 
     private sealed record SupportedFileType(FileType FileType, string Extension, string Description)
     {
@@ -66,13 +67,13 @@ internal static partial class FileExtensions
     }
 
     private static readonly SupportedFileType[] SupportedFileTypes =
-    {
+    [
         new ( FileType.CSV,  "csv", "CSV"  ),
         new ( FileType.TSV,  "tsv", "TSV"  ),
         new ( FileType.Text, "txt", "Text" ),
         new ( FileType.Log,  "log", "Log"  ),
         new ( FileType.All,  "",    "All"  ) { Mask = "*" }
-    };
+    ];
 
     private static readonly HashSet<string> SupportedFileExtensions = new(
         SupportedFileTypes
@@ -80,7 +81,7 @@ internal static partial class FileExtensions
             .Select(static supportedFileType => $".{supportedFileType.Extension}"),
         FileNameComparer);
 
-    private static readonly FileType DefaultFileType = SupportedFileTypes.First().FileType;
+    private static readonly FileType DefaultFileType = SupportedFileTypes[0].FileType;
     private static readonly string DefaultMask = GetMask(DefaultFileType);
 
 #if NETCOREAPP
@@ -98,7 +99,7 @@ internal static partial class FileExtensions
         Array.FindIndex(SupportedFileTypes, supportedFileType => supportedFileType.FileType == fileType) + 1;
 
     private static SupportedFileType GetSupportedFileType(this FileType fileType) =>
-        SupportedFileTypes.FirstOrDefault(supportedFileType => supportedFileType.FileType == fileType) ?? throw new IndexOutOfRangeException($"Unknown {nameof(FileType)} {fileType}");
+        SupportedFileTypes.FirstOrDefault(supportedFileType => supportedFileType.FileType == fileType) ?? throw new InvalidEnumArgumentException($"Unknown {nameof(FileType)} {fileType}");
 
     public static readonly string Filter = string.Join("|", SupportedFileTypes.Select(static supportedFileType => $"{supportedFileType.Description} Files (*.{supportedFileType.Mask})|*.{supportedFileType.Mask}"));
 
@@ -147,7 +148,7 @@ internal static partial class FileExtensions
 
             if (enumerator.MoveNext())
             {
-                var columnHeader = enumerator.Current!;
+                var columnHeader = enumerator.Current;
 
                 if (addHeader && !columnHeader.IsPresent(true, headerDetection ?? default))
                 {
@@ -157,7 +158,7 @@ internal static partial class FileExtensions
 
             while(enumerator.MoveNext())
             {
-                yield return enumerator.Current!;
+                yield return enumerator.Current;
             }
         }
 
@@ -176,7 +177,7 @@ internal static partial class FileExtensions
 
         void InitStringInternCache() =>
             _stringInternCache ??= internStringComparer is null
-                ? new()
+                ? []
                 : new(internStringComparer);
     }
 
@@ -213,7 +214,7 @@ internal static partial class FileExtensions
 
         return csvParser.Read()
             ? GetHeader()
-            : Array.Empty<string>();
+            : [];
 
         string[] GetHeader()
         {
@@ -251,7 +252,7 @@ internal static partial class FileExtensions
             Func<string> GetUniqueFallbackColumnNameGenerator()
             {
                 var enumerator = Enumerable.Range(0, int.MaxValue).GetEnumerator();
-                var lookup = new Lazy<HashSet<string>>(() => new HashSet<string>(header!), LazyThreadSafetyMode.None);
+                var lookup = new Lazy<HashSet<string>>(() => [..header!], LazyThreadSafetyMode.None);
 
                 return GetUniqueFallbackColumnName;
 
@@ -281,7 +282,7 @@ internal static partial class FileExtensions
             _      => CsvSeparators
         };
 
-        var csvSeparator = defaultCsvSeparators.First();
+        var csvSeparator = defaultCsvSeparators[0];
 
         if (!File.Exists(fileName))
         {
@@ -304,7 +305,7 @@ internal static partial class FileExtensions
             IEnumerable<char> GetHeaderChars()
             {
                 using var streamReader = new StreamReader(OpenFile(fileName, doNotLockFiles));
-                return streamReader.ReadLine()?.ToCharArray() ?? Array.Empty<char>();
+                return streamReader.ReadLine()?.ToCharArray() ?? [];
             }
         }
         catch (Exception exception) when (exception.CanBeHandled())
@@ -419,8 +420,8 @@ internal static partial class FileExtensions
     {
         var pathsValid = paths.GetFiles().ToImmutableList();
 
-        // Get longest common path prefix.
-        var filePaths = pathsValid.FirstOrDefault()?.Split(Path.DirectorySeparatorChar) ?? Array.Empty<string>();
+        // Get the longest common path prefix.
+        var filePaths = pathsValid.FirstOrDefault()?.Split(Path.DirectorySeparatorChar) ?? [];
 
         var directorySeparator = Path.DirectorySeparatorChar
 #if !NETCOREAPP
@@ -430,7 +431,7 @@ internal static partial class FileExtensions
 
         return Enumerable.Range(1, filePaths.Length)
             .Select(i => string.Join(directorySeparator, filePaths.Take(i).ToImmutableList()))
-            .LastOrDefault(prefix => pathsValid.All(path => path.StartsWith(prefix, FileNameComparison))) ?? string.Empty;
+            .LastOrDefault(prefix => pathsValid.TrueForAll(path => path.StartsWith(prefix, FileNameComparison))) ?? string.Empty;
     }
 
     public static IEnumerable<string> EnumFiles(this IEnumerable<string> paths, ICollection<Exception>? exceptions = null) =>
@@ -473,7 +474,7 @@ internal static partial class FileExtensions
             FilesOrderBy.SizeDesc          => fileInfos.OrderByDescending(static fileInfo => fileInfo.Length),
             FilesOrderBy.LastWriteTimeAsc  => fileInfos.OrderBy(static fileInfo => fileInfo.LastWriteTimeUtc),
             FilesOrderBy.LastWriteTimeDesc => fileInfos.OrderByDescending(static fileInfo => fileInfo.LastWriteTimeUtc),
-            _                              => throw new IndexOutOfRangeException($"Unknown {nameof(FilesOrderBy)} {filesOrderBy}")
+            _                              => throw new InvalidEnumArgumentException($"Unknown {nameof(FilesOrderBy)} {filesOrderBy}")
         };
 
         return fileInfos.Select(static fileInfo => fileInfo.FullName);
@@ -532,8 +533,8 @@ internal static partial class FileExtensions
 
         var whiteSpaceChars = WhiteSpaceChars
             .Except(csvConfiguration.Delimiter.Length == 1
-                ? new[] { csvConfiguration.Delimiter.First() }
-                : Array.Empty<char>())
+                ? [csvConfiguration.Delimiter.First()]
+                : [])
             .ToArray();
 
         if (whiteSpaceChars.Any())
@@ -560,7 +561,7 @@ internal static partial class FileExtensions
                 WhitespaceTrimOptions.All          => TrimOptions.Trim | TrimOptions.InsideQuotes,
                 WhitespaceTrimOptions.Trim         => TrimOptions.Trim,
                 WhitespaceTrimOptions.InsideQuotes => TrimOptions.InsideQuotes,
-                _                                  => throw new IndexOutOfRangeException($"Unknown {nameof(WhitespaceTrimOptions)} {whitespaceTrimOptions}")
+                _                                  => throw new InvalidEnumArgumentException($"Unknown {nameof(WhitespaceTrimOptions)} {whitespaceTrimOptions}")
             };
 
         void SkipLeadingRows()
@@ -599,7 +600,7 @@ internal static partial class FileExtensions
             // Single file.
             if (File.Exists(path))
             {
-                return new[] { path };
+                return [path];
             }
 
             var fileOrMask = Path.GetFileName(path);
@@ -633,7 +634,7 @@ internal static partial class FileExtensions
         {
             exceptions.Add(path, exception);
 
-            return Enumerable.Empty<string>();
+            return [];
         }
     }
 
@@ -689,7 +690,7 @@ internal static partial class FileExtensions
                 HeaderDetection.LatinLettersNumbersPunctuation => HeaderDetectionLatinLettersNumbersPunctuationRegex(),
                 HeaderDetection.LatinLettersNumbers            => HeaderDetectionLatinLettersNumbersRegex(),
                 HeaderDetection.LatinLetters                   => HeaderDetectionLatinLettersRegex(),
-                _                                              => throw new IndexOutOfRangeException($"Unknown {nameof(HeaderDetection)} {headerDetection}")
+                _                                              => throw new InvalidEnumArgumentException($"Unknown {nameof(HeaderDetection)} {headerDetection}")
             }) is not null;
     }
 

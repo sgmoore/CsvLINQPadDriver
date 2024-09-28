@@ -58,7 +58,7 @@
         </Style>
 
         <Style TargetType="{x:Type Hyperlink}">
-            <Setter Property="TextDecorations" Value=""/>
+            <Setter Property="TextDecorations" Value="None"/>
         </Style>
 
         <Style x:Key="HelpTextBlock" TargetType="{x:Type TextBlock}">

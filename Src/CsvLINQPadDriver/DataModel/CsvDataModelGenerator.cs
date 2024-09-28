@@ -161,7 +161,7 @@ internal sealed class CsvDataModelGenerator
                     continue;
                 }
 
-                yield return new CsvTable(file, csvSeparator, columns, new List<CsvRelation>())
+                yield return new CsvTable(file, csvSeparator, columns, [])
                 {
                     CodeName    = codeName,
                     ClassName   = GetClassName(),
@@ -201,7 +201,7 @@ internal sealed class CsvDataModelGenerator
     private static void MakeCodeNamesUnique<TItem>(IEnumerable<TItem> items, IEnumerable<string>? reservedNames = null)
         where TItem: class, ICsvNames
     {
-        var names = new HashSet<string>(reservedNames ?? Enumerable.Empty<string>(), CsvTableBase.StringComparer);
+        var names = new HashSet<string>(reservedNames ?? [], CsvTableBase.StringComparer);
 
         foreach (var item in items)
         {

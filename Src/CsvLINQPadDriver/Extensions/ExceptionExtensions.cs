@@ -7,11 +7,12 @@ internal static class ExceptionExtensions
 {
     public static bool CanBeHandled(this Exception exception) =>
         exception is not (
-            NullReferenceException   or
-            IndexOutOfRangeException or
-            OutOfMemoryException     or
             AccessViolationException or
-            ThreadAbortException     or
-            StackOverflowException
-            );
+            ArgumentException        or
+            IndexOutOfRangeException or
+            NullReferenceException   or
+            OutOfMemoryException     or
+            StackOverflowException   or
+            ThreadAbortException
+        );
 }

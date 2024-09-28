@@ -9,7 +9,7 @@ namespace CsvLINQPadDriver.Extensions;
 internal static partial class CodeGenExtensions
 {
     private static readonly Lazy<CodeDomProvider> CsCodeDomProvider = new(static () => CodeDomProvider.CreateProvider("C#"));
-    private static readonly string[] InvalidIdentifierNames = { nameof(System), nameof(ToString), nameof(Equals), nameof(GetHashCode) };
+    private static readonly string[] InvalidIdentifierNames = [nameof(System), nameof(ToString), nameof(Equals), nameof(GetHashCode)];
 
     private const string SafeChar = "_";
 
