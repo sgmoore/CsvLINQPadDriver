@@ -182,7 +182,10 @@ CSV files connection can be added to LINQPad 8/7/6/5 the same way as any other c
 * Auto-detect file encodings: try to detect file encodings.
 * Validate file paths: checks if file paths are valid.
 * Ignore files with invalid format: files with content which does not resemble CSV will be ignored.
-* Do not lock files being read: allow other processes to modify files being read. Note that driver does not track files changes.
+* Do not lock files being read: allow other processes to modify files being read.
+
+> [!NOTE]
+> Driver does not track files changes.
 
 ### Format ###
 
@@ -281,6 +284,7 @@ string? ToString();
 
 Formats object the way PowerShell [Format-List](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-list) does.
 
+> [!NOTE]
 > Relations are not participated.
 
 #### GetHashCode ####
@@ -291,12 +295,12 @@ int GetHashCode();
 
 Returns object hash code.
 
-Note that:
+> [!IMPORTANT]
+> * Generated data object is mutable.
+> * Hash code is not cached and recalculated each time method is called.
+> * Each time driver is reloaded string hash codes will be [different](https://andrewlock.net/why-is-string-gethashcode-different-each-time-i-run-my-program-in-net-core/).
 
-* Generated data object is mutable.
-* Hash code is not cached and recalculated each time method is called.
-* Each time driver is reloaded string hash codes will be [different](https://andrewlock.net/why-is-string-gethashcode-different-each-time-i-run-my-program-in-net-core/).
-
+> [!NOTE]
 > Depends on string comparison driver setting. Relations are not participated.
 
 #### Equals ####
@@ -306,6 +310,7 @@ bool Equals(T? obj);
 bool Equals(object? obj);
 ```
 
+> [!NOTE]
 > Depends on string comparison driver setting. Relations are not participated.
 
 #### Overloaded Operators ####
@@ -315,6 +320,7 @@ static bool operator == (T? obj1, T? obj2);
 static bool operator != (T? obj1, T? obj2);
 ```
 
+> [!NOTE]
 > Depends on string comparison driver setting. Relations are not participated.
 
 #### Indexers ####
@@ -326,6 +332,7 @@ string? this[string index] { get; set; }
 
 See [properties access](#properties-access) below.
 
+> [!NOTE]
 > Relations are not participated.
 
 ### Properties Access ###
