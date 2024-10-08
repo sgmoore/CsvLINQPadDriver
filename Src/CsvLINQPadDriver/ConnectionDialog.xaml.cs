@@ -79,7 +79,7 @@ internal partial class ConnectionDialog
             yield return wildcardsToolTip;
             yield return $"{((KeyGesture)ApplicationCommands.Paste.InputGestures[0]).DisplayString} ({PasteFoldersWithSubfoldersCommand.InputGestureText}) pastes from clipboard, appends {mask} ({recursiveMask}) to folders";
             yield return $"{PasteFromClipboardFoldersAndProceedCommand.InputGestureText} ({PasteFromClipboardFoldersWithSubfoldersAndProceedCommand.InputGestureText}) clears, pastes from clipboard, appends {mask} ({recursiveMask}) to folders and proceeds";
-            yield return $"Use '{inlineComment}' to comment line";
+            yield return $"Use '{inlineComment}' to comment a line";
         }
     }
 
