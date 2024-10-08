@@ -9,7 +9,7 @@
     Icon="Connection.ico"
     Background="{x:Static SystemColors.ControlBrush}"
     Width="660"
-    Height="830"
+    Height="880"
     WindowStartupLocation="CenterScreen"
     ShowInTaskbar="True"
     SnapsToDevicePixels="True"
@@ -38,6 +38,9 @@
                             MethodName="GetValues"/>
         <ObjectDataProvider x:Key="HeaderDetectionData"
                             ObjectType="{x:Type enumObjectDataSources:HeaderDetectionEnumObjectDataSource}"
+                            MethodName="GetValues"/>
+        <ObjectDataProvider x:Key="CsvModeOptionsData"
+                            ObjectType="{x:Type enumObjectDataSources:CsvModeOptionsEnumObjectDataSource}"
                             MethodName="GetValues"/>
         <ObjectDataProvider x:Key="WhitespaceTrimOptionsData"
                             ObjectType="{x:Type enumObjectDataSources:WhitespaceTrimOptionsEnumObjectDataSource}"
@@ -473,6 +476,9 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <Label Content="_Separator (\t for tab)"
@@ -497,12 +503,56 @@
 
                         <StackPanel Grid.Row="2" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
                             <CheckBox
+                                Name="CsvModeCheckBox"
+                                IsChecked="{Binding AllowCsvMode}"
+                                Content="Parsing _mode"
+                                ToolTip="CSV parsing mode"/>
+                        </StackPanel>
+                        <ComboBox Grid.Row="2" Grid.Column="1"
+                                  Style="{StaticResource GroupComboBoxStyle}"
+                                  ToolTip="CSV parsing mode"
+                                  SelectedValue="{Binding CsvMode}"
+                                  ItemsSource="{Binding Source={StaticResource CsvModeOptionsData}}"
+                                  IsEnabled="{Binding IsChecked, ElementName=CsvModeCheckBox}"/>
+
+                        <StackPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                            <CheckBox
+                                Name="UseEscapeCheckBox"
+                                IsChecked="{Binding UseEscapeChar}"
+                                Content="_Escape"
+                                ToolTip="Escape character"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 Style="{StaticResource GroupTextBoxStyle}"
+                                 MaxLength="1"
+                                 MaxLines="1"
+                                 Text="{Binding EscapeChars}"
+                                 ToolTip="Character used as an escape. &quot; if empty"
+                                 IsEnabled="{Binding IsChecked, ElementName=UseEscapeCheckBox}"/>
+
+                        <StackPanel Grid.Row="4" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                            <CheckBox
+                                Name="UseQuoteCheckBox"
+                                IsChecked="{Binding UseQuoteChar}"
+                                Content="_Quote"
+                                ToolTip="Quote character"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="4" Grid.Column="1"
+                                 Style="{StaticResource GroupTextBoxStyle}"
+                                 MaxLength="1"
+                                 MaxLines="1"
+                                 Text="{Binding QuoteChars}"
+                                 ToolTip="Character used as a quote. &quot; if empty"
+                                 IsEnabled="{Binding IsChecked, ElementName=UseQuoteCheckBox}"/>
+
+                        <StackPanel Grid.Row="5" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                            <CheckBox
                                 Name="AllowSkipLeadingRowsCheckBox"
                                 IsChecked="{Binding AllowSkipLeadingRows}"
                                 Content="S_kip leading rows"
                                 ToolTip="Skip the specified number of leading rows"/>
                         </StackPanel>
-                        <TextBox Grid.Row="2" Grid.Column="1"
+                        <TextBox Grid.Row="5" Grid.Column="1"
                                  Style="{StaticResource GroupTextBoxStyle}"
                                  MaxLength="3"
                                  MaxLines="1"
@@ -511,14 +561,14 @@
                                  IsEnabled="{Binding IsChecked, ElementName=AllowSkipLeadingRowsCheckBox}"/>
 
                         <!-- ReSharper disable once MarkupAttributeTypo -->
-                        <StackPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                        <StackPanel Grid.Row="6" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
                             <CheckBox
                                   Name="TrimSpacesCheckBox"
                                   IsChecked="{Binding TrimSpaces}"
                                   Content="Tri_m spaces"
                                   ToolTip="Trim spaces"/>
                         </StackPanel>
-                        <ComboBox Grid.Row="3" Grid.Column="1"
+                        <ComboBox Grid.Row="6" Grid.Column="1"
                                   Style="{StaticResource GroupComboBoxStyle}"
                                   ToolTip="Where to trim spaces"
                                   SelectedValue="{Binding WhitespaceTrimOptions}"
@@ -526,14 +576,14 @@
                                   IsEnabled="{Binding IsChecked, ElementName=TrimSpacesCheckBox}"/>
 
                         <!-- ReSharper disable once MarkupAttributeTypo -->
-                        <StackPanel Grid.Row="4" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                        <StackPanel Grid.Row="7" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
                             <CheckBox
                                   Name="AllowCommentsCheckBox"
                                   IsChecked="{Binding AllowComments}"
                                   Content="Allow co_mments"
                                   ToolTip="Allow single-line comments"/>
                         </StackPanel>
-                        <TextBox Grid.Row="4" Grid.Column="1"
+                        <TextBox Grid.Row="7" Grid.Column="1"
                                  Style="{StaticResource GroupTextBoxStyle}"
                                  MaxLength="1"
                                  MaxLines="1"
@@ -541,13 +591,13 @@
                                  ToolTip="Character used as a single-line comment. # if empty"
                                  IsEnabled="{Binding IsChecked, ElementName=AllowCommentsCheckBox}"/>
 
-                        <StackPanel Grid.Row="5" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
+                        <StackPanel Grid.Row="8" Grid.Column="0" Style="{StaticResource CheckBoxStackPanelStyle}">
                             <CheckBox
                                 Name="HeaderFormatCheckBox"
                                 IsChecked="{Binding AddHeader}"
                                 Content="_Header detection" ToolTip="Detect or add header"/>
                         </StackPanel>
-                        <Grid Grid.Row="5" Grid.Column="1" IsEnabled="{Binding IsChecked, ElementName=HeaderFormatCheckBox}">
+                        <Grid Grid.Row="8" Grid.Column="1" IsEnabled="{Binding IsChecked, ElementName=HeaderFormatCheckBox}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="56*" MinWidth="20"/>
                                 <ColumnDefinition Width="4"/>

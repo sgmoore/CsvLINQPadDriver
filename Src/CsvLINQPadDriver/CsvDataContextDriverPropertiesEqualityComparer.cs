@@ -40,6 +40,12 @@ internal sealed class CsvDataContextDriverPropertiesEqualityComparer : IEquality
                 yield return x.SkipLeadingRowsCount == y.SkipLeadingRowsCount;
             }
 
+            yield return x.AllowCsvMode == y.AllowCsvMode;
+            if (x.AllowCsvMode && y.AllowCsvMode)
+            {
+                yield return x.CsvMode == y.CsvMode;
+            }
+
             yield return x.TrimSpaces == y.TrimSpaces;
             if (x.TrimSpaces && y.TrimSpaces)
             {
@@ -50,6 +56,18 @@ internal sealed class CsvDataContextDriverPropertiesEqualityComparer : IEquality
             if (x.AllowComments && y.AllowComments)
             {
                 yield return x.CommentChar == y.CommentChar;
+            }
+
+            yield return x.UseEscapeChar == y.UseEscapeChar;
+            if (x.UseEscapeChar && y.UseEscapeChar)
+            {
+                yield return x.EscapeChar == y.EscapeChar;
+            }
+
+            yield return x.UseQuoteChar == y.UseQuoteChar;
+            if (x.UseQuoteChar && y.UseQuoteChar)
+            {
+                yield return x.QuoteChar == y.QuoteChar;
             }
 
             yield return x.AddHeader == y.AddHeader;

@@ -75,6 +75,30 @@ public class CsvDataContextDriverProperties : CsvDataContextDriverPropertiesBase
         set => SetValue(value);
     }
 
+    public override bool UseEscapeChar
+    {
+        get => GetValue(false);
+        set => SetValue(value);
+    }
+
+    public override string EscapeChars
+    {
+        get => GetValue(string.Empty)!;
+        set => SetValue(value);
+    }
+
+    public override bool UseQuoteChar
+    {
+        get => GetValue(false);
+        set => SetValue(value);
+    }
+
+    public override string QuoteChars
+    {
+        get => GetValue(string.Empty)!;
+        set => SetValue(value);
+    }
+
     public override string CsvSeparator
     {
         get => GetValue(string.Empty)!;
@@ -117,9 +141,21 @@ public class CsvDataContextDriverProperties : CsvDataContextDriverPropertiesBase
     public override int SkipLeadingRowsCount
     {
         get => GetValue(DefaultSkipLeadingRowsCount,
-            static v => v is >= DefaultSkipLeadingRowsCount and <= MaxSkipLeadingRowsCount
+                        static v => v is >= DefaultSkipLeadingRowsCount and <= MaxSkipLeadingRowsCount
                             ? v
                             : DefaultSkipLeadingRowsCount);
+        set => SetValue(value);
+    }
+
+    public override bool AllowCsvMode
+    {
+        get => GetValue(false);
+        set => SetValue(value);
+    }
+
+    public override CsvModeOptions CsvMode
+    {
+        get => GetValue(CsvModeOptions.Default);
         set => SetValue(value);
     }
 
@@ -179,7 +215,7 @@ public class CsvDataContextDriverProperties : CsvDataContextDriverPropertiesBase
 
     public override bool DetectRelations
     {
-        get => GetValue(true);
+        get => GetValue(false);
         set => SetValue(value);
     }
 

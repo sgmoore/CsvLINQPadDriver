@@ -111,12 +111,15 @@ internal static partial class FileExtensions
         NoBomEncoding noBomEncoding,
         bool allowComments,
         char? commentChar,
+        char? escapeChar,
+        char? quoteChar,
         bool ignoreBadData,
         bool autoDetectEncoding,
         bool ignoreBlankLines,
         bool doNotLockFiles,
         bool addHeader,
         HeaderDetection? headerDetection,
+        CsvModeOptions? csvMode,
         WhitespaceTrimOptions? whitespaceTrimOptions,
         bool allowSkipLeadingRows,
         int skipLeadingRowsCount,
@@ -133,10 +136,13 @@ internal static partial class FileExtensions
                     noBomEncoding,
                     allowComments,
                     commentChar,
+                    escapeChar,
+                    quoteChar,
                     ignoreBadData,
                     autoDetectEncoding,
                     ignoreBlankLines,
                     doNotLockFiles,
+                    csvMode,
                     whitespaceTrimOptions,
                     allowSkipLeadingRows,
                     skipLeadingRowsCount))
@@ -187,6 +193,8 @@ internal static partial class FileExtensions
         NoBomEncoding noBomEncoding,
         bool allowComments,
         char? commentChar,
+        char? escapeChar,
+        char? quoteChar,
         bool ignoreBadData,
         bool autoDetectEncoding,
         bool ignoreBlankLines,
@@ -194,6 +202,7 @@ internal static partial class FileExtensions
         bool addHeader,
         HeaderDetection headerDetection,
         HeaderFormat headerFormat,
+        CsvModeOptions? csvMode,
         WhitespaceTrimOptions? whitespaceTrimOptions,
         bool allowSkipLeadingRows,
         int skipLeadingRowsCount)
@@ -204,10 +213,13 @@ internal static partial class FileExtensions
             noBomEncoding,
             allowComments,
             commentChar,
+            escapeChar,
+            quoteChar,
             ignoreBadData,
             autoDetectEncoding,
             ignoreBlankLines,
             doNotLockFiles,
+            csvMode,
             whitespaceTrimOptions,
             allowSkipLeadingRows,
             skipLeadingRowsCount);
@@ -251,6 +263,7 @@ internal static partial class FileExtensions
 
             Func<string> GetUniqueFallbackColumnNameGenerator()
             {
+                // ReSharper disable once GenericEnumeratorNotDisposed
                 var enumerator = Enumerable.Range(0, int.MaxValue).GetEnumerator();
                 var lookup = new Lazy<HashSet<string>>(() => [..header!], LazyThreadSafetyMode.None);
 
@@ -327,12 +340,15 @@ internal static partial class FileExtensions
         NoBomEncoding noBomEncoding,
         bool allowComments,
         char? commentChar,
+        char? escapeChar,
+        char? quoteChar,
         bool ignoreBadData,
         bool autoDetectEncoding,
         bool ignoreBlankLines,
         bool doNotLockFiles,
         bool debugInfo,
-        WhitespaceTrimOptions whitespaceTrimOptions,
+        CsvModeOptions? csvMode,
+        WhitespaceTrimOptions? whitespaceTrimOptions,
         bool allowSkipLeadingRows,
         int skipLeadingRowsCount)
     {
@@ -353,10 +369,13 @@ internal static partial class FileExtensions
                 noBomEncoding,
                 allowComments,
                 commentChar,
+                escapeChar,
+                quoteChar,
                 ignoreBadData,
                 autoDetectEncoding,
                 ignoreBlankLines,
                 doNotLockFiles,
+                csvMode,
                 whitespaceTrimOptions,
                 allowSkipLeadingRows,
                 skipLeadingRowsCount);
@@ -398,11 +417,11 @@ internal static partial class FileExtensions
             // Too many strange characters.
             var charsCount = headerRow
                 .Concat(dataRow)
-                .Sum(static s => s?.Length ?? 0);
+                .Sum(static s => s.Length);
 
             var validCharsCount = headerRow
                 .Concat(dataRow)
-                .Sum(static s => Enumerable.Range(0, s?.Length ?? 0).Count(i => char.IsLetterOrDigit(s ?? string.Empty, i)));
+                .Sum(static s => Enumerable.Range(0, s.Length).Count(i => char.IsLetterOrDigit(s, i)));
 
             const double validCharsMinOkRatio = 0.5;
 
@@ -505,10 +524,13 @@ internal static partial class FileExtensions
         NoBomEncoding noBomEncoding,
         bool allowComments,
         char? commentChar,
+        char? escapeChar,
+        char? quoteChar,
         bool ignoreBadData,
         bool autoDetectEncoding,
         bool ignoreBlankLines,
         bool doNotLockFiles,
+        CsvModeOptions? csvMode,
         WhitespaceTrimOptions? whitespaceTrimOptions,
         bool allowSkipLeadingRows,
         int skipLeadingRowsCount)
@@ -522,6 +544,7 @@ internal static partial class FileExtensions
             HasHeaderRecord          = false,
             DetectColumnCountChanges = false,
             IgnoreBlankLines         = ignoreBlankLines,
+            Mode                     = GetCsvMode(),
             TrimOptions              = GetTrimOptions(),
             BufferSize               = bufferSize,
             ProcessFieldBufferSize   = bufferSize
@@ -529,11 +552,13 @@ internal static partial class FileExtensions
 
         csvConfiguration.Delimiter    = csvSeparator ?? csvConfiguration.Delimiter;
         csvConfiguration.Comment      = commentChar ?? csvConfiguration.Comment;
-        csvConfiguration.BadDataFound = ignoreBadData ? null! : csvConfiguration.BadDataFound;
+        csvConfiguration.Escape       = escapeChar ?? csvConfiguration.Escape;
+        csvConfiguration.Quote        = quoteChar ?? csvConfiguration.Quote;
+        csvConfiguration.BadDataFound = ignoreBadData ? null : csvConfiguration.BadDataFound;
 
         var whiteSpaceChars = WhiteSpaceChars
             .Except(csvConfiguration.Delimiter.Length == 1
-                ? [csvConfiguration.Delimiter.First()]
+                ? [csvConfiguration.Delimiter[0]]
                 : [])
             .ToArray();
 
@@ -562,6 +587,15 @@ internal static partial class FileExtensions
                 WhitespaceTrimOptions.Trim         => TrimOptions.Trim,
                 WhitespaceTrimOptions.InsideQuotes => TrimOptions.InsideQuotes,
                 _                                  => throw new InvalidEnumArgumentException($"Unknown {nameof(WhitespaceTrimOptions)} {whitespaceTrimOptions}")
+            };
+
+        CsvMode GetCsvMode() =>
+            csvMode switch
+            {
+                null or CsvModeOptions.Default     => CsvMode.RFC4180,
+                CsvModeOptions.Escape              => CsvMode.Escape,
+                CsvModeOptions.NoEscape            => CsvMode.NoEscape,
+                _                                  => throw new InvalidEnumArgumentException($"Unknown {nameof(CsvModeOptions)} {csvMode}")
             };
 
         void SkipLeadingRows()
@@ -644,10 +678,13 @@ internal static partial class FileExtensions
         NoBomEncoding noBomEncoding,
         bool allowComments,
         char? commentChar,
+        char? escapeChar,
+        char? quoteChar,
         bool ignoreBadData,
         bool autoDetectEncoding,
         bool ignoreBlankLines,
         bool doNotLockFiles,
+        CsvModeOptions? csvMode,
         WhitespaceTrimOptions? whitespaceTrimOptions,
         bool allowSkipLeadingRows,
         int skipLeadingRowsCount)
@@ -658,10 +695,13 @@ internal static partial class FileExtensions
             noBomEncoding,
             allowComments,
             commentChar,
+            escapeChar,
+            quoteChar,
             ignoreBadData,
             autoDetectEncoding,
             ignoreBlankLines,
             doNotLockFiles,
+            csvMode,
             whitespaceTrimOptions,
             allowSkipLeadingRows,
             skipLeadingRowsCount);

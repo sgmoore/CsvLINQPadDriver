@@ -84,12 +84,15 @@ internal sealed class CsvDataModelGenerator
                 var noBomEncoding = _csvDataContextDriverProperties.NoBomEncoding;
                 var allowComments = _csvDataContextDriverProperties.AllowComments;
                 var commentChar = _csvDataContextDriverProperties.CommentChar;
+                var escapeChar = _csvDataContextDriverProperties.EscapeChar;
+                var quoteChar = _csvDataContextDriverProperties.QuoteChar;
                 var ignoreBadData = _csvDataContextDriverProperties.IgnoreBadData;
                 var autoDetectEncoding = _csvDataContextDriverProperties.AutoDetectEncoding;
                 var ignoreBlankLines = _csvDataContextDriverProperties.IgnoreBlankLines;
                 var addHeader = _csvDataContextDriverProperties.AddHeader;
                 var headerDetection = _csvDataContextDriverProperties.HeaderDetection;
                 var headerFormat = _csvDataContextDriverProperties.HeaderFormat;
+                var csvMode = _csvDataContextDriverProperties.CsvMode;
                 var whitespaceTrimOptions = _csvDataContextDriverProperties.WhitespaceTrimOptions;
                 var allowSkipLeadingRows = _csvDataContextDriverProperties.AllowSkipLeadingRows;
                 var skipLeadingRowsCount = _csvDataContextDriverProperties.SkipLeadingRowsCount;
@@ -100,11 +103,14 @@ internal sealed class CsvDataModelGenerator
                         noBomEncoding,
                         allowComments,
                         commentChar,
+                        escapeChar,
+                        quoteChar,
                         ignoreBadData,
                         autoDetectEncoding,
                         ignoreBlankLines,
                         doNotLockFiles,
                         debugInfo,
+                        csvMode,
                         whitespaceTrimOptions,
                         allowSkipLeadingRows,
                         skipLeadingRowsCount))
@@ -131,6 +137,8 @@ internal sealed class CsvDataModelGenerator
                             noBomEncoding,
                             allowComments,
                             commentChar,
+                            escapeChar,
+                            quoteChar,
                             ignoreBadData,
                             autoDetectEncoding,
                             ignoreBlankLines,
@@ -138,6 +146,7 @@ internal sealed class CsvDataModelGenerator
                             addHeader,
                             headerDetection,
                             headerFormat,
+                            csvMode,
                             whitespaceTrimOptions,
                             allowSkipLeadingRows,
                             skipLeadingRowsCount)

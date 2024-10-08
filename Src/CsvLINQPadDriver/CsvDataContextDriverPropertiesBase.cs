@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 using CsvLINQPadDriver.Extensions;
@@ -21,11 +20,23 @@ public abstract class CsvDataContextDriverPropertiesBase : ICsvDataContextDriver
     public abstract bool AutoDetectEncoding { get; set; }
     public abstract bool AllowComments { get; set; }
     public abstract string CommentChars { get; set; }
+    public abstract bool UseQuoteChar { get; set; }
+    public abstract string QuoteChars { get; set; }
+    public abstract bool UseEscapeChar { get; set; }
+    public abstract string EscapeChars { get; set; }
 
     public char? CommentChar =>
-        string.IsNullOrWhiteSpace(CommentChars)
+        GetFirstCharOrNull(CommentChars);
+
+    public char? QuoteChar =>
+        GetFirstCharOrNull(QuoteChars);
+
+    public char? EscapeChar => GetFirstCharOrNull(EscapeChars);
+
+    private static char? GetFirstCharOrNull(string? s) =>
+        string.IsNullOrWhiteSpace(s)
             ? null
-            : CommentChars.TrimStart().First();
+            : s!.TrimStart()[0];
 
     public IEnumerable<string> ParsedFiles =>
         Files.GetFiles();
@@ -62,6 +73,8 @@ public abstract class CsvDataContextDriverPropertiesBase : ICsvDataContextDriver
     public abstract HeaderFormat HeaderFormat { get; set; }
     public abstract bool AllowSkipLeadingRows { get; set; }
     public abstract int SkipLeadingRowsCount { get; set; }
+    public abstract bool AllowCsvMode { get; set; }
+    public abstract CsvModeOptions CsvMode { get; set; }
     public abstract bool TrimSpaces { get; set; }
     public abstract WhitespaceTrimOptions WhitespaceTrimOptions { get; set; }
     public abstract bool UseCsvHelperSeparatorAutoDetection { get; set; }

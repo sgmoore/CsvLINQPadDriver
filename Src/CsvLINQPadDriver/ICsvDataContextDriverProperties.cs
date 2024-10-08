@@ -64,6 +64,36 @@ public interface ICsvDataContextDriverProperties
     char? CommentChar { get; }
 
     /// <summary>
+    /// Indicates that the escape character should be used.
+    /// </summary>
+    bool UseEscapeChar { get; set; }
+
+    /// <summary>
+    /// The escape characters.
+    /// </summary>
+    string EscapeChars { get; set; }
+
+    /// <summary>
+    /// The escape character.
+    /// </summary>
+    char? EscapeChar { get; }
+
+    /// <summary>
+    /// Indicates that the quote character should be used.
+    /// </summary>
+    bool UseQuoteChar { get; set; }
+
+    /// <summary>
+    /// The quote characters.
+    /// </summary>
+    string QuoteChars { get; set; }
+
+    /// <summary>
+    /// The quote character.
+    /// </summary>
+    char? QuoteChar { get; }
+
+    /// <summary>
     /// The parsed files.
     /// </summary>
     IEnumerable<string> ParsedFiles { get; }
@@ -114,12 +144,22 @@ public interface ICsvDataContextDriverProperties
     bool TrimSpaces { get; }
 
     /// <summary>
+    /// Indicates that the CSV parsing mode should be used.
+    /// </summary>
+    bool AllowCsvMode { get; set; }
+
+    /// <summary>
+    /// The CSV parsing mode.
+    /// </summary>
+    CsvModeOptions CsvMode { get; set; }
+
+    /// <summary>
     /// The spaces trimming method.
     /// </summary>
     WhitespaceTrimOptions WhitespaceTrimOptions { get; }
 
     /// <summary>
-    /// Indicates that the CsvHelper separator auto detection should be used.
+    /// Indicates that the CsvHelper separator auto-detection should be used.
     /// </summary>
     bool UseCsvHelperSeparatorAutoDetection { get; }
 

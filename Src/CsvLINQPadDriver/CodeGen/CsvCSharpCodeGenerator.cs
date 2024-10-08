@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -84,13 +85,16 @@ internal sealed class CsvCSharpCodeGenerator
                 {ParamName("csvSeparator")}{context.Table.CsvSeparator.AsValidCSharpCode()},
                 {ParamName("noBomEncoding")}{typeof(NoBomEncoding).GetCodeTypeClassName()}.{_properties.NoBomEncoding},
                 {ParamName("allowComments")}{GetBoolConst(_properties.AllowComments)},
-                {ParamName("commentChar")}{GetNullableValue(_properties.AllowComments && _properties.CommentChar.HasValue, () => _properties.CommentChar.AsValidCSharpCode())},
+                {ParamName("commentChar")}{GetNullableValue(_properties is { AllowComments: true, CommentChar: not null }, () => _properties.CommentChar.AsValidCSharpCode())},
+                {ParamName("escapeChar")}{GetNullableValue(_properties is { UseEscapeChar: true, EscapeChar: not null }, () => _properties.EscapeChar.AsValidCSharpCode())},
+                {ParamName("quoteChar")}{GetNullableValue(_properties is { UseQuoteChar: true, QuoteChar: not null }, () => _properties.QuoteChar.AsValidCSharpCode())},
                 {ParamName("ignoreBadData")}{GetBoolConst(_properties.IgnoreBadData)},
                 {ParamName("autoDetectEncoding")}{GetBoolConst(_properties.AutoDetectEncoding)},
                 {ParamName("ignoreBlankLines")}{GetBoolConst(_properties.IgnoreBlankLines)},
                 {ParamName("doNotLockFiles")}{GetBoolConst(_properties.DoNotLockFiles)},
                 {ParamName("addHeader")}{GetBoolConst(_properties.AddHeader)},
                 {ParamName("headerDetection")}{GetNullableValue(_properties.AddHeader, () => $"{typeof(HeaderDetection).GetCodeTypeClassName()}.{_properties.HeaderDetection}")},
+                {ParamName("csvMode")}{GetNullableValue(_properties.AllowCsvMode, () => $"{typeof(CsvModeOptions).GetCodeTypeClassName()}.{_properties.CsvMode}")},
                 {ParamName("whitespaceTrimOptions")}{GetNullableValue(_properties.TrimSpaces, () => $"{typeof(WhitespaceTrimOptions).GetCodeTypeClassName()}.{_properties.WhitespaceTrimOptions}")},
                 {ParamName("allowSkipLeadingRows")}{GetBoolConst(_properties.AllowSkipLeadingRows)},
                 {ParamName("skipLeadingRowsCount")}{IntToStr(_properties.SkipLeadingRowsCount)},
@@ -285,7 +289,7 @@ internal sealed class CsvCSharpCodeGenerator
             StringComparison.InvariantCultureIgnoreCase => nameof(StringComparer.InvariantCultureIgnoreCase),
             StringComparison.Ordinal                    => nameof(StringComparer.Ordinal),
             StringComparison.OrdinalIgnoreCase          => nameof(StringComparer.OrdinalIgnoreCase),
-            _                                           => throw new IndexOutOfRangeException($"Unknown {nameof(StringComparison)} {stringComparison}")
+            _                                           => throw new InvalidEnumArgumentException($"Unknown {nameof(StringComparison)} {stringComparison}")
         };
 }
 
@@ -297,12 +301,12 @@ internal static class CsvCSharpCodeGeneratorExtensions
 
         static string ToClassName(string? name) =>
             string.IsNullOrWhiteSpace(name)
-                ? throw new NullReferenceException("Class name is null or whitespace")
+                ? throw new ArgumentNullException(nameof(name), "Class name is null or whitespace")
                 : $"R{(name!.Length < 3 ? name : name.Singularize())}";
     }
 
     public static string GetCodeTypeClassName(this Type type, params string[] genericParameters) =>
-        type.FullName!.Split('`').First() + (genericParameters.Any() ? $"<{string.Join(",", genericParameters)}>" : string.Empty);
+        type.FullName!.Split('`')[0] + (genericParameters.Any() ? $"<{string.Join(",", genericParameters)}>" : string.Empty);
 
     public static string AsValidCSharpCode<T>(this T input)
     {
