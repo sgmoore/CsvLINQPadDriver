@@ -1,7 +1,9 @@
 ﻿<Project>
   <PropertyGroup>
-    <Version>8.11.0</Version>
-    <PackageReleaseNotes>Update CsvHelper.</PackageReleaseNotes>
+    <Version>8.12.0</Version>
+    <PackageReleaseNotes>Add Parsing mode option.
+Add Escape option.
+Add Quote option.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
