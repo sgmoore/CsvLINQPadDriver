@@ -85,7 +85,7 @@ Id,Title,AuthorId
 21,Author 2 Book 1,2
 ```
 
-CsvLINQPadDriver will generate data context similar to (simplified):
+CsvLINQPadDriver will generate data context similar to (simplified) if [relations](#relations) detection is enabled:
 
 ```csharp
 public class CsvDataContext
