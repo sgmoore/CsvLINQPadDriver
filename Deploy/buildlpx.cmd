@@ -45,6 +45,7 @@ if exist %folder%\Microsoft.Bcl.*.dll set additional=^
 %folder%\Humanizer.dll ^
 %folder%\Microsoft.WindowsAPICodePack.dll ^
 %folder%\Microsoft.WindowsAPICodePack.Shell.dll ^
+%folder%\System.Threading.Tasks.Extensions.dll ^
 %folder%\UnicodeCharsetDetector.dll ^
 %folder%\UtfUnknown.dll
 
