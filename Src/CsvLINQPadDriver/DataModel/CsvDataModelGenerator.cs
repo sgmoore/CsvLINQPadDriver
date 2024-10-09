@@ -74,13 +74,14 @@ internal sealed class CsvDataModelGenerator
 
             var fileIndex = 0;
 
-            foreach (var file in files.Where(File.Exists))
+            foreach (var file in files)
             {
                 var doNotLockFiles = _csvDataContextDriverProperties.DoNotLockFiles;
                 var debugInfo = _csvDataContextDriverProperties.DebugInfo;
-                var csvSeparator = _csvDataContextDriverProperties.UseCsvHelperSeparatorAutoDetection
-                    ? null
-                    : _csvDataContextDriverProperties.SafeCsvSeparator ?? file.CsvDetectSeparator(doNotLockFiles, debugInfo).ToString();
+                var csvSeparator =
+                    _csvDataContextDriverProperties.UseCsvHelperSeparatorAutoDetection
+                        ? null
+                        : _csvDataContextDriverProperties.SafeCsvSeparator ?? file.CsvDetectSeparator(doNotLockFiles, debugInfo).ToString();
                 var noBomEncoding = _csvDataContextDriverProperties.NoBomEncoding;
                 var allowComments = _csvDataContextDriverProperties.AllowComments;
                 var commentChar = _csvDataContextDriverProperties.CommentChar;

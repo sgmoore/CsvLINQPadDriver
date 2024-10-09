@@ -297,11 +297,6 @@ internal static partial class FileExtensions
 
         var csvSeparator = defaultCsvSeparators[0];
 
-        if (!File.Exists(fileName))
-        {
-            return csvSeparator;
-        }
-
         var defaultCsvSeparator = csvSeparator;
 
         try
@@ -353,13 +348,6 @@ internal static partial class FileExtensions
         int skipLeadingRowsCount)
     {
         var header = $"{fileName} is not valid CSV file:";
-
-        if (!File.Exists(fileName))
-        {
-            $"{header} file does not exist".WriteToLog(debugInfo);
-
-            return false;
-        }
 
         try
         {
@@ -631,12 +619,6 @@ internal static partial class FileExtensions
     {
         try
         {
-            // Single file.
-            if (File.Exists(path))
-            {
-                return [path];
-            }
-
             var fileOrMask = Path.GetFileName(path);
 
             string baseDir;
