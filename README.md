@@ -47,7 +47,7 @@
 
 ## Description
 
-CsvLINQPadDriver is LINQPad 8/7/6/5 data context dynamic driver for querying [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) files.
+**CsvLINQPadDriver** is LINQPad 8/7/6/5 data context dynamic driver for querying [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) files.
 
 * You can query data in CSV files with LINQ, just like it would be regular database. No need to write custom data model, mappings, etc.
 * Driver automatically generates new data types for every CSV file with corresponding properties and mappings for all the columns. Every column is a `string`, no data type detection is provided.
@@ -85,7 +85,7 @@ Id,Title,AuthorId
 21,Author 2 Book 1,2
 ```
 
-CsvLINQPadDriver will generate data context similar to (simplified) if [relations](#relations) detection is enabled:
+**CsvLINQPadDriver** will generate data context similar to (simplified) if [relations](#relations) detection is enabled:
 
 ```csharp
 public class CsvDataContext
@@ -852,6 +852,7 @@ TimeOnly? ToTimeOnlySafe(
 
 * In case of `Cannot load type 'LINQPad.User.***' from cache` error, use connection context menu **Close all connections**.
 * In case of `BadDataException: You can ignore bad data by setting BadDataFound to null` error, check `Ignore bad data` at [Format](#format) section.
+* **CsvLINQPadDriver** writes `CsvLINQPadDriver.txt` log file to the `%LOCALAPPDATA%\LINQPad\Logs` for the [LINQPad 5](https://www.linqpad.net/LINQPad5.aspx) or to the corresponding `%LOCALAPPDATA%\LINQPad\Logs.*` [LINQPad 8](https://www.linqpad.net/LINQPad8.aspx)/[LINQPad 7](https://www.linqpad.net/LINQPad7.aspx)/[LINQPad 6](https://www.linqpad.net/LINQPad6.aspx) folders. This file is never truncated.
 
 ## Authors
 
