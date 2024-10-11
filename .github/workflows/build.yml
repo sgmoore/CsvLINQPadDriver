@@ -3,9 +3,10 @@
 on: [push, pull_request]
 
 env:
+  NAME: CsvLINQPadDriver
   SLN:  CsvLINQPadDriver.sln
   SLN5: CsvLINQPadDriver.LINQPad5.sln
-  SLN_CONFIG: Release
+  CONFIG: Release
   BIN_POSTFIX: .Bin
   RETENTION_DAYS: 1
 
@@ -18,7 +19,7 @@ jobs:
     # Set up
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4.0.0
+      uses: actions/setup-dotnet@v4.0.1
       with:
         dotnet-version: |
           8.0.x
@@ -26,20 +27,17 @@ jobs:
     # Check out
 
     - name: Check out ${{env.SLN}}
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4.2.1
 
     # LINQPad 8/7/6
 
-    - name: Restore ${{env.SLN}}
-      run: dotnet restore ${{env.SLN}}
+    - name: Build ${{env.SLN}} ${{env.CONFIG}}
+      run: dotnet build ${{env.SLN}} --configuration ${{env.CONFIG}} -p:GITHUB_ACTIONS=true
 
-    - name: Build ${{env.SLN}} ${{env.SLN_CONFIG}}
-      run: dotnet build ${{env.SLN}} --configuration ${{env.SLN_CONFIG}} --no-restore -p:GITHUB_ACTIONS=true
+    - name: Test ${{env.SLN}} ${{env.CONFIG}}
+      run: dotnet test ${{env.SLN}} --configuration ${{env.CONFIG}} --no-build --verbosity normal
 
-    - name: Test ${{env.SLN}} ${{env.SLN_CONFIG}}
-      run: dotnet test ${{env.SLN}} --configuration ${{env.SLN_CONFIG}} --no-build --verbosity normal
-
-    - name: Create ${{env.SLN}} ${{env.SLN_CONFIG}} test report
+    - name: Create ${{env.SLN}} ${{env.CONFIG}} test report
       uses: dorny/test-reporter@v1.9.1
       if: ${{success() || failure()}}
       with:
@@ -50,7 +48,7 @@ jobs:
     # LINQPad 5
 
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.3.2
+      uses: microsoft/setup-msbuild@v2
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2.0.0
@@ -58,8 +56,8 @@ jobs:
     - name: Restore ${{env.SLN5}}
       run: nuget restore ${{env.SLN5}}
 
-    - name: Build ${{env.SLN5}} ${{env.SLN_CONFIG}}
-      run: msbuild ${{env.SLN5}} /p:Configuration=${{env.SLN_CONFIG}}
+    - name: Build ${{env.SLN5}} ${{env.CONFIG}}
+      run: msbuild ${{env.SLN5}} /p:Configuration=${{env.CONFIG}}
 
     # Create LPX
 
@@ -68,12 +66,12 @@ jobs:
 
     # Upload artifacts
 
-    - name: Publish ${{env.SLN}} ${{env.SLN_CONFIG}}, ${{env.SLN5}} ${{env.SLN_CONFIG}}
-      uses: actions/upload-artifact@v4.3.0
+    - name: Publish ${{env.SLN}} ${{env.CONFIG}}, ${{env.SLN5}} ${{env.CONFIG}}
+      uses: actions/upload-artifact@v4.4.3
       with:
-        name: CsvLINQPadDriver${{env.BIN_POSTFIX}}
+        name: ${{env.NAME}}${{env.BIN_POSTFIX}}
         path: |
-          bin/${{env.SLN_CONFIG}}/CsvLINQPadDriver.*.*nupkg
+          bin/${{env.CONFIG}}/${{env.NAME}}.*.*nupkg
           Deploy/*.lpx
           Deploy/*.lpx?
         retention-days: ${{env.RETENTION_DAYS}}
