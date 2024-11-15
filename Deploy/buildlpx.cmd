@@ -1,6 +1,6 @@
 @echo off
 
-set version=8.12.0
+set version=8.13.0
 set fileName=CsvLINQPadDriver.%version%
 set ext=lpx
 set ext6=%ext%6
@@ -11,6 +11,7 @@ set zip="%ProgramFiles%\7-Zip\7z.exe"
 
 echo on
 
+call :pack %fileName%-net9.%ext6%   net9.0-windows        || goto break
 call :pack %fileName%-net8.%ext6%   net8.0-windows        || goto break
 call :pack %fileName%-net7.%ext6%   net7.0-windows        || goto break
 call :pack %fileName%-net6.%ext6%   net6.0-windows        || goto break
