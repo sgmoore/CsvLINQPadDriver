@@ -445,8 +445,7 @@ internal static partial class FileExtensions
         paths
             .GetFiles()
             .SelectMany(files => EnumFiles(files, exceptions))
-            .Distinct(FileNameComparer)
-            .ToImmutableList();
+            .Distinct(FileNameComparer);
 
     public static string GetHumanizedFileSize(this string fileName, bool debugInfo) =>
         GetHumanizedFileSize(GetFileSize(fileName, debugInfo));
