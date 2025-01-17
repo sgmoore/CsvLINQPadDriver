@@ -378,7 +378,7 @@ internal partial class ConnectionDialog
 #if NETCOREAPP
         Path.IsPathFullyQualified(path);
 #else
-            Path.IsPathRooted(path);
+        Path.IsPathRooted(path);
 #endif
 
     private bool TryGetFullPathAtLineIncludingInlineComment(out string fullPath)
